@@ -1,4 +1,4 @@
-package repo
+package pg_repo
 
 import (
 	"database/sql"
@@ -8,11 +8,11 @@ import (
 )
 
 /*Creo una struttura in cui memorizzare la connessione e associo i metodi GET ad essa*/
-type Repository struct {
+type PgRepository struct {
 	db *sql.DB
 }
 
-func (r *Repository) GetArticoliCollezioneREPO(idCollezione int) []Item {
+func (r PgRepository) GetArticoliCollezioneREPO(idCollezione int) []core.Item {
 	result := make([]core.Item, 0)
 	var query string
 	var rows *sql.Rows
@@ -35,7 +35,7 @@ func (r *Repository) GetArticoliCollezioneREPO(idCollezione int) []Item {
 	return result
 }
 
-func (r *Repository) GetArticoliREPO() []core.Item {
+func (r PgRepository) GetArticoliREPO() []core.Item {
 	result := make([]core.Item, 0)
 	query := "SELECT articolo.id, articolo.name FROM articolo ORDER BY articolo.id"
 	rows, err := r.db.Query(query)
@@ -50,7 +50,7 @@ func (r *Repository) GetArticoliREPO() []core.Item {
 	return result
 }
 
-func (r *Repository) GetAllCollezioniREPO() []core.Collection {
+func (r PgRepository) GetAllCollezioniREPO() []core.Collection {
 	result := make([]core.Collection, 0)
 	query := "SELECT * FROM collezione ORDER BY id"
 	rows, err := r.db.Query(query)
@@ -69,7 +69,7 @@ func (r *Repository) GetAllCollezioniREPO() []core.Collection {
 *
 Restituisce l'articolo che ha come id 'idArticolo'
 */
-func (r *Repository) GetArticoloREPO(idArticolo int) core.Item {
+func (r PgRepository) GetArticoloREPO(idArticolo int) core.Item {
 	result := core.Item{
 		Id:   0,
 		Name: "",
@@ -102,12 +102,12 @@ func (r *Repository) GetArticoloREPO(idArticolo int) core.Item {
 	return result
 }
 
-func New() Repository {
+func New() PgRepository {
 	connStr := "host=localhost port=5432 user=demo password=demo dbname=demo sslmode=disable"
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal(err)
 	}
-	r := Repository{db: db}
+	r := PgRepository{db: db}
 	return r
 }
