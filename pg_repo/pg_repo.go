@@ -12,7 +12,7 @@ type PgRepository struct {
 	db *sql.DB
 }
 
-func (r PgRepository) GetArticoliCollezioneREPO(idCollezione int) []core.Item {
+func (r *PgRepository) GetArticoliCollezioneREPO(idCollezione int) []core.Item {
 	result := make([]core.Item, 0)
 	var query string
 	var rows *sql.Rows
@@ -35,7 +35,7 @@ func (r PgRepository) GetArticoliCollezioneREPO(idCollezione int) []core.Item {
 	return result
 }
 
-func (r PgRepository) GetArticoliREPO() []core.Item {
+func (r *PgRepository) GetArticoliREPO() []core.Item {
 	result := make([]core.Item, 0)
 	query := "SELECT articolo.id, articolo.name FROM articolo ORDER BY articolo.id"
 	rows, err := r.db.Query(query)
@@ -50,7 +50,7 @@ func (r PgRepository) GetArticoliREPO() []core.Item {
 	return result
 }
 
-func (r PgRepository) GetAllCollezioniREPO() []core.Collection {
+func (r *PgRepository) GetAllCollezioniREPO() []core.Collection {
 	result := make([]core.Collection, 0)
 	query := "SELECT * FROM collezione ORDER BY id"
 	rows, err := r.db.Query(query)
@@ -69,7 +69,7 @@ func (r PgRepository) GetAllCollezioniREPO() []core.Collection {
 *
 Restituisce l'articolo che ha come id 'idArticolo'
 */
-func (r PgRepository) GetArticoloREPO(idArticolo int) core.Item {
+func (r *PgRepository) GetArticoloREPO(idArticolo int) core.Item {
 	result := core.Item{
 		Id:   0,
 		Name: "",
