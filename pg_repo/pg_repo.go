@@ -6,7 +6,7 @@ import (
 	_ "github.com/lib/pq"
 	"log"
 )
-
+q
 /*Creo una struttura in cui memorizzare la connessione e associo i metodi GET ad essa*/
 type PgRepository struct {
 	db *sql.DB
