@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  demo-db:
+    image: "postgres/alpine"
+    networks:
+      - demo-network
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./db/db.env
+    volumes:
+      - ./db/dbdata/:/var/lib/postgresql/data/
