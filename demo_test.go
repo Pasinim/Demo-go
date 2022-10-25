@@ -36,9 +36,7 @@ func initDemoDB(ctx context.Context, db sql.DB) error {
        nome varchar(20), 
        sku varchar(20),
        collezione_id serial4
-   );
-
-CREATE TABLE demo.`
+   );`
 
 	_, err := db.ExecContext(ctx, query)
 	return err
