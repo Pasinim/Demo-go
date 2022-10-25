@@ -10,21 +10,24 @@ package utility
 import (
 	"context"
 	"fmt"
+	"github.com/stretchr/testify/require"
 	"log"
 	"testing"
 	"time"
-
-	"github.com/stretchr/testify/require"
 
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
 )
 
 type TestDatabase struct {
-	instance testcontainers.Container
+	Instance testcontainers.Container
 }
 
-func NewTestDatabase(t *testing.T) *TestDatabase {
+/*
+*
+Restituisce un Database di Test
+*/
+func NewTestDatabase() *TestDatabase {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 	req := testcontainers.ContainerRequest{
@@ -36,7 +39,7 @@ func NewTestDatabase(t *testing.T) *TestDatabase {
 			"POSTGRES_USER":     "demo",
 			"POSTGRES_PASSWORD": "demo",
 		},
-		WaitingFor: wait.ForListeningPort("5432/tcp"),
+		WaitingFor: wait.ForListeningPort("5432"),
 	}
 	postgres, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
 		ContainerRequest: req,
@@ -47,14 +50,14 @@ func NewTestDatabase(t *testing.T) *TestDatabase {
 	}
 
 	return &TestDatabase{
-		instance: postgres,
+		Instance: postgres,
 	}
 }
 
 func (db *TestDatabase) Port(t *testing.T) int {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
-	p, err := db.instance.MappedPort(ctx, "5432")
+	p, err := db.Instance.MappedPort(ctx, "5432")
 	require.NoError(t, err)
 	return p.Int()
 }
@@ -66,5 +69,5 @@ func (db *TestDatabase) ConnectionString(t *testing.T) string {
 func (db *TestDatabase) Close(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
-	require.NoError(t, db.instance.Terminate(ctx))
+	require.NoError(t, db.Instance.Terminate(ctx))
 }

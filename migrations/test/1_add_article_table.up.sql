@@ -1,4 +1,3 @@
-
 CREATE TABLE IF NOT EXISTS demo.articolo (
     id serial PRIMARY KEY NOT NULL,
     name varchar(20),
