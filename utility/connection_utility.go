@@ -25,9 +25,9 @@ type TestDatabase struct {
 
 /*
 *
-Restituisce un Database di Test
+Restituisce un container di Test
 */
-func NewTestDatabase() *TestDatabase {
+func NewTestContainer() *TestDatabase {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 	req := testcontainers.ContainerRequest{
@@ -54,16 +54,19 @@ func NewTestDatabase() *TestDatabase {
 	}
 }
 
-func (db *TestDatabase) Port(t *testing.T) int {
+func (db *TestDatabase) Port() int {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 	p, err := db.Instance.MappedPort(ctx, "5432")
-	require.NoError(t, err)
+	if err != nil {
+		log.Fatal(err)
+	}
+	//require.NoError(t, err) serve se fa asser nil?
 	return p.Int()
 }
 
-func (db *TestDatabase) ConnectionString(t *testing.T) string {
-	return fmt.Sprintf("postgres://demo:demo@127.0.0.1:%d/demo?sslmode=disable", db.Port(t))
+func (db *TestDatabase) ConnectionString() string {
+	return fmt.Sprintf("postgres://demo:demo@127.0.0.1:%d/demo?sslmode=disable", db.Port())
 }
 
 func (db *TestDatabase) Close(t *testing.T) {

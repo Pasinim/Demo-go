@@ -1,10 +1,13 @@
 package main
 
+//https://demo.hedgedoc.org/hawmQYCZQnuoORDs3XOd2Q?edit
 import (
 	"context"
 	"database/sql"
 	"demo/utility"
+	"fmt"
 	"github.com/google/go-cmp/cmp"
+	_ "github.com/lib/pq"
 	"github.com/testcontainers/testcontainers-go"
 	"log"
 	"testing"
@@ -32,35 +35,33 @@ func initDemoDB(ctx context.Context, db sql.DB) error {
        id serial4 primary key not null,
        nome varchar(20), 
        sku varchar(20),
-       collezione_id serial4 
-       
-       
-       
-   );`
+       collezione_id serial4
+   );
+
+CREATE TABLE demo.`
 
 	_, err := db.ExecContext(ctx, query)
 	return err
 }
 
-func truncateDemoDB(ctx context.Context, db sql.DB) error {
-	const query = `TRUNCATE demo.articolo`
-	_, err := db.ExecContext(ctx, query)
-	return err
-}
+//
+//func truncateDemoDB(ctx context.Context, db sql.DB) error {
+//	const query = `TRUNCATE demo.articolo`
+//	_, err := db.ExecContext(ctx, query)
+//	return err
+//}
 
 func TestIntegratonDBInsertSelect(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipp")
 	}
-
 	ctx := context.Background()
-	dbContainer := utility.NewTestDatabase(t)
+	dbContainer := utility.NewTestContainer()
 	defer dbContainer.Close(t)
-	db, err := sql.Open("postgres", dbContainer.ConnectionString(t))
+	db, err := sql.Open("postgres", dbContainer.ConnectionString())
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	err = initDemoDB(ctx, *db)
 	if err != nil {
 		log.Fatal(err)
@@ -91,4 +92,16 @@ func TestIntegratonDBInsertSelect(t *testing.T) {
 	if !cmp.Equal(item, savedItem) {
 		t.Fatalf("Gli elementi non corrispondono:\n%s", cmp.Diff(item, savedItem))
 	}
+}
+
+//func TestJoinDB(t *testing.T) {
+//	string
+//	query := `SELECT id FROM articolo JOIN collezione ON
+//    	collezione.id = articolo.id
+//    	ORDER BY articolo.id`
+//
+//}
+
+func main() {
+	fmt.Println("asdadasdad")
 }
