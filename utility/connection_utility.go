@@ -48,7 +48,6 @@ func NewTestContainer() *TestDatabase {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	return &TestDatabase{
 		Instance: postgres,
 	}

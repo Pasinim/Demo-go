@@ -1,25 +1,23 @@
-package migrations
+package main
 
 import (
 	"context"
 	"database/sql"
 	"demo/utility"
 	"fmt"
+	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/golang-migrate/migrate/v4/source/github"
 	"github.com/stretchr/testify/assert"
 	"log"
 	"testing"
+	"time"
 )
 
-/**
-Migration 1 -> testo, se passa m.Up (?) -> Migration 2
-Arrange, act assert
-*/
-
-func testArticolo(t *testing.T) {
+func TestArticolo(t *testing.T) {
 	db := initTestDb()
+	defer db.Close()
 	const query = `SELECT id FROM articolo`
 	rows, err := db.Query(query)
 	if err != nil {
@@ -43,10 +41,9 @@ func initTestDb() *sql.DB {
 	2. Mappo la porta creata da testContainers sulla porta che ho esposto
 	3. Indico la cartella delle migrazioni
 	*/
-	//time.Sleep(5 * time.Second)
 	port, _ := dbContainer.Instance.MappedPort(context.Background(), "5432")
 	//devo mappare la porta 5432 su quella che è stata generata esternamente
-	connStr := fmt.Sprintf("postgres://demo:demo@127.0.0.1:%s/demo?sslmode=disable", port)
+	connStr := fmt.Sprintf("postgres://demo:demo@127.0.0.1:%d/demo?sslmode=disable", port.Int())
 	m, err := migrate.New(
 		"file://migrations/test",
 		connStr)
@@ -54,8 +51,18 @@ func initTestDb() *sql.DB {
 		log.Fatal(err)
 	}
 	err = m.Up()
+	fmt.Println("migrate.UP")
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer m.Drop()
+	fmt.Println("PORT: ", port)
+	fmt.Println("time.Sleep...")
+	time.Sleep(2 * time.Minute)
 	return db
+}
+
+func main() {
+	initTestDb()
+
 }

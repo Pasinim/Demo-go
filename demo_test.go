@@ -30,8 +30,8 @@ type demoDBContainer struct {
 }
 
 func initDemoDB(ctx context.Context, db sql.DB) error {
-	const query = `CREATE SCHEMA demo;
-   CREATE TABLE demo.articolo(
+	const query = `
+   CREATE TABLE IF NOT EXISTS articolo(
        id serial4 primary key not null,
        nome varchar(20), 
        sku varchar(20),
