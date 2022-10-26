@@ -69,12 +69,8 @@ func (r *PgRepository) GetAllCollezioniREPO() []core.Collection {
 *
 Restituisce l'articolo che ha come id 'idArticolo'
 */
-func (r *PgRepository) GetArticoloREPO(idArticolo int) core.Item {
-	result := core.Item{
-		Id:   0,
-		Name: "",
-		Sku:  "",
-	}
+func (r *PgRepository) GetArticoloREPO(idArticolo int) *core.Item {
+	result := new(core.Item)
 
 	query := "SELECT id FROM articolo ORDER BY articolo.id"
 	ok := false

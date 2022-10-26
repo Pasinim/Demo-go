@@ -10,7 +10,7 @@ import (
 type Repository interface {
 	GetAllCollezioniREPO() []core.Collection
 	GetArticoliREPO() []core.Item
-	GetArticoloREPO(int) core.Item
+	GetArticoloREPO(int) *core.Item
 	GetArticoliCollezioneREPO(int) []core.Item
 }
 
