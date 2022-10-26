@@ -69,8 +69,8 @@ func (r *PgRepository) GetAllCollezioniREPO() []core.Collection {
 *
 Restituisce l'articolo che ha come id 'idArticolo'
 */
-func (r *PgRepository) GetArticoloREPO(idArticolo int) *core.Item {
-	result := new(core.Item)
+func (r *PgRepository) GetArticoloREPO(idArticolo int) core.Item {
+	result := *new(core.Item)
 
 	query := "SELECT id FROM articolo ORDER BY articolo.id"
 	ok := false
@@ -91,8 +91,11 @@ func (r *PgRepository) GetArticoloREPO(idArticolo int) *core.Item {
 		return result
 	}
 
-	query = "SELECT id, name, sku FROM articolo WHERE id = $1 ORDER BY articolo.id"
+	query = "SELECT id, nome, sku FROM articolo WHERE id = $1"
 	rows, err = r.db.Query(query, currId)
+	if err != nil {
+		log.Fatal(err)
+	}
 	rows.Next()
 	rows.Scan(&result.Id, &result.Name, &result.Sku)
 	return result
