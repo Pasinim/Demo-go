@@ -39,7 +39,7 @@ func TestInsertCollection(t *testing.T) {
 	const query = `INSERT INTO collezione(id, name) VALUES (1, 'collTest')`
 	_, err = db.Exec(query)
 	assert.Nil(t, err)
-	const selectQuery = `SELECT id, name FROM collezione`
+	const selectQuery = `SELECT id, nome FROM collezione`
 	rows := db.QueryRow(selectQuery)
 	var result Collection
 	rows.Scan(&result.Id, &result.Name)

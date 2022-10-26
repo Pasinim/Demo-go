@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS collezione
 ( id serial PRIMARY KEY NOT NULL,
-name VARCHAR(20)
+nome VARCHAR(20)
 );
 

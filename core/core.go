@@ -2,7 +2,7 @@ package core
 
 type Item struct {
 	Id   int    `db:"id"`
-	Name string `db:"name"`
+	Name string `db:"nome"`
 	Sku  int    `db:"sku"`
 }
 

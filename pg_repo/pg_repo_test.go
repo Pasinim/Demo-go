@@ -13,33 +13,6 @@ import (
 
 var db = utility.InitTestDb()
 
-func TestPgRepository_GetAllCollezioniREPO(t *testing.T) {
-	type fields struct {
-		db *sql.DB
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		want   []core.Collection
-	}{
-		{
-			name:   "",
-			fields: fields{},
-			want:   nil,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			r := &PgRepository{
-				db: tt.fields.db,
-			}
-			if got := r.GetAllCollezioniREPO(); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetAllCollezioniREPO() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
 func TestPgRepository_GetArticoliCollezioneREPO(t *testing.T) {
 	type fields struct {
 		db *sql.DB
@@ -76,6 +49,7 @@ func TestPgRepository_GetArticoliCollezioneREPO(t *testing.T) {
 			},
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r := &PgRepository{
@@ -88,52 +62,80 @@ func TestPgRepository_GetArticoliCollezioneREPO(t *testing.T) {
 	}
 }
 
-func TestPgRepository_GetArticoliREPO(t *testing.T) {
-	type fields struct {
-		db *sql.DB
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		want   []core.Item
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			r := &PgRepository{
-				db: tt.fields.db,
-			}
-			if got := r.GetArticoliREPO(); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetArticoliREPO() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestPgRepository_GetArticoloREPO(t *testing.T) {
-	type fields struct {
-		db *sql.DB
-	}
-	type args struct {
-		idArticolo int
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		args   args
-		want   core.Item
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			r := &PgRepository{
-				db: tt.fields.db,
-			}
-			if got := r.GetArticoloREPO(tt.args.idArticolo); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetArticoloREPO() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
+//
+//func TestPgRepository_GetAllCollezioniREPO(t *testing.T) {
+//	type fields struct {
+//		db *sql.DB
+//	}
+//	tests := []struct {
+//		name   string
+//		fields fields
+//		want   []core.Collection
+//	}{
+//		{
+//			name:   "",
+//			fields: fields{},
+//			want:   nil,
+//		},
+//	}
+//	for _, tt := range tests {
+//		t.Run(tt.name, func(t *testing.T) {
+//			r := &PgRepository{
+//				db: tt.fields.db,
+//			}
+//			if got := r.GetAllCollezioniREPO(); !reflect.DeepEqual(got, tt.want) {
+//				t.Errorf("GetAllCollezioniREPO() = %v, want %v", got, tt.want)
+//			}
+//		})
+//	}
+//}
+//
+//func TestPgRepository_GetArticoliREPO(t *testing.T) {
+//	type fields struct {
+//		db *sql.DB
+//	}
+//	tests := []struct {
+//		name   string
+//		fields fields
+//		want   []core.Item
+//	}{
+//		// TODO: Add test cases.
+//	}
+//	for _, tt := range tests {
+//		t.Run(tt.name, func(t *testing.T) {
+//			r := &PgRepository{
+//				db: tt.fields.db,
+//			}
+//			if got := r.GetArticoliREPO(); !reflect.DeepEqual(got, tt.want) {
+//				t.Errorf("GetArticoliREPO() = %v, want %v", got, tt.want)
+//			}
+//		})
+//	}
+//}
+//
+//func TestPgRepository_GetArticoloREPO(t *testing.T) {
+//	type fields struct {
+//		db *sql.DB
+//	}
+//	type args struct {
+//		idArticolo int
+//	}
+//	tests := []struct {
+//		name   string
+//		fields fields
+//		args   args
+//		want   core.Item
+//	}{
+//		// TODO: Add test cases.
+//	}
+//	for _, tt := range tests {
+//		t.Run(tt.name, func(t *testing.T) {
+//			r := &PgRepository{
+//				db: tt.fields.db,
+//			}
+//			if got := r.GetArticoloREPO(tt.args.idArticolo); !reflect.DeepEqual(got, tt.want) {
+//				t.Errorf("GetArticoloREPO() = %v, want %v", got, tt.want)
+//			}
+//		})
+//	}
+//}
