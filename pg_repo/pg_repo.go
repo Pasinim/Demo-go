@@ -12,18 +12,31 @@ type PgRepository struct {
 	db *sql.DB
 }
 
-func (r *PgRepository) GetArticoliCollezioneREPO(idCollezione int) []core.Item {
+/*
+*
+Restituisce gli articoli della Collezione avente id `idCollezione`
+*/
+func (r *PgRepository) GetArticoliCollezioneByIdREPO(idCollezione int) []core.Item {
 	result := make([]core.Item, 0)
-	var query string
-	var rows *sql.Rows
-	var err error
-	if idCollezione == 0 {
-		query = "SELECT articolo.id, articolo.nome, articolo.sku FROM articolo JOIN collezione ON articolo.collezione_id = collezione.id ORDER BY articolo.id"
-		rows, err = r.db.Query(query)
-	} else {
-		query = "SELECT articolo.id, articolo.nome, articolo.sku FROM articolo JOIN collezione ON articolo.collezione_id = collezione.id WHERE collezione.id = $1 ORDER BY articolo.id"
-		rows, err = r.db.Query(query, idCollezione)
+	query := `SELECT articolo.id, articolo.nome, articolo.sku FROM articolo  
+   			 JOIN collezione ON articolo.collezione_id = collezione.id 
+            WHERE collezione.id = $1 ORDER BY articolo.id`
+	rows, err := r.db.Query(query, idCollezione)
+	if err != nil {
+		log.Fatal(err)
 	}
+	for rows.Next() {
+		var it core.Item
+		rows.Scan(&it.Id, &it.Name, &it.Sku)
+		result = append(result, it)
+	}
+	return result
+}
+
+func (r *PgRepository) GetArticoliCollezioniREPO() []core.Item {
+	result := make([]core.Item, 0)
+	query := "SELECT articolo.id, articolo.nome, articolo.sku FROM articolo JOIN collezione ON articolo.collezione_id = collezione.id ORDER BY articolo.id"
+	rows, err := r.db.Query(query)
 	if err != nil {
 		log.Fatal(err)
 	}
