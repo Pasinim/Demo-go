@@ -5,6 +5,12 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
+/*
+*
+Il mock permette di creare una struttura con gli stessi metodi
+della repository, definisco i metodi con la stessa signature
+e decido io cosa devono restituire (dico cosa restituire nel test)
+*/
 type RepositoryMock struct {
 	mock.Mock
 }

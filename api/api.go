@@ -3,6 +3,7 @@ package api
 import (
 	"demo/core"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -24,7 +25,10 @@ func (e *EcommerceApi) GETCollezione(c *gin.Context) {
 	if !ok {
 		c.JSON(http.StatusOK, e.rep.GetAllCollezioniREPO())
 	} else {
-		idInt, _ := strconv.Atoi(id)
+		idInt, err := strconv.Atoi(id)
+		if err != nil {
+			log.Fatal(err)
+		}
 		c.JSON(http.StatusOK, e.rep.GetArticoliCollezioneREPO(idInt))
 	}
 }

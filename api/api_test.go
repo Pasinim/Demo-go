@@ -27,7 +27,7 @@ func TestEcommerceApi_GETCollezione(t *testing.T) {
 		want   []core.Collection
 	}{
 		{
-			name: "Collezione Estiva",
+			name: "Collezione 1",
 			fields: fields{
 				rep: mk,
 			},
@@ -57,55 +57,78 @@ func TestEcommerceApi_GETCollezione(t *testing.T) {
 
 			var got []core.Collection
 			err := json.Unmarshal(w.Body.Bytes(), &got)
-			if err != nil {
-				t.Fatal(err)
-			}
-
+			assert.Nil(t, err)
 			assert.Equal(t, tt.want, got)
 		})
 	}
 }
 
-//func TestEcommerceApi_GETArticoli(t *testing.T) {
-//	type fields struct {
-//		rep Repository
-//	}
-//	type args struct {
-//		c *gin.Context
-//	}
-//	tests := []struct {
-//		name   string
-//		fields fields
-//		args   args
-//	}{
-//		{},
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			e := &EcommerceApi{
-//				rep: tt.fields.rep,
-//			}
-//			e.GETArticoli(tt.args.c)
-//		})
-//	}
-//}
+func TestEcommerceApi_GETArticoli(t *testing.T) {
+	mk := new(mockt.RepositoryMock)
+	w := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(w)
 
-//func TestNew(t *testing.T) {
-//	type args struct {
-//		r Repository
-//	}
-//	tests := []struct {
-//		name string
-//		args args
-//		want *gin.Engine
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			if got := New(tt.args.r); !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("New() = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
+	type fields struct {
+		rep Repository
+	}
+	type args struct {
+		c *gin.Context
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   []core.Item
+	}{
+		{
+			name: "Articoli 1",
+			fields: fields{
+				rep: mk,
+			},
+			args: args{
+				c: ctx,
+			},
+			want: []core.Item{
+
+				{
+					Id:   1,
+					Name: "Scarpe",
+					Sku:  11,
+				},
+				{
+					Id:   2,
+					Name: "Maglia",
+					Sku:  22,
+				},
+				{
+					Id:   3,
+					Name: "Panta",
+					Sku:  44,
+				},
+				{
+					Id:   4,
+					Name: "Maglione",
+					Sku:  44,
+				},
+				{
+					Id:   5,
+					Name: "Berretto",
+					Sku:  55,
+				},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			e := &EcommerceApi{
+				rep: tt.fields.rep,
+			}
+			mk.On("GetArticoliREPO").Return(tt.want)
+			e.GETArticoli(tt.args.c)
+			var got []core.Item
+			err := json.Unmarshal(w.Body.Bytes(), &got)
+			assert.Nil(t, err)
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}
