@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"demo/core"
 	"demo/utility"
-	"fmt"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq"
@@ -183,7 +182,6 @@ func TestPgRepository_GetArticoloREPO(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		fmt.Println("DEBUG")
 		t.Run(tt.name, func(t *testing.T) {
 			r := &PgRepository{
 				db: tt.fields.db,
