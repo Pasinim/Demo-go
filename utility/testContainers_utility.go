@@ -31,14 +31,3 @@ func InitTestDb() *sql.DB {
 	//time.Sleep(20 * time.Minute)
 	return db
 }
-
-//func PopulateTestDB(db *sql.DB) {
-//	const query = `insert into collezione values (1, 'Collezione 1');
-//		insert into collezione values (1, 'Collezione 2');
-//		insert into articolo values (1, 'Scarpe', 11, 1),
-//		(2, 'Maglia', 22, 1),
-//		(3, 'Panta', 33, 1),
-//		(4, 'Maglione', 44, 2);
-//
-//`
-//}

@@ -3,6 +3,7 @@ package pg_repo
 import (
 	"database/sql"
 	"demo/core"
+	"demo/utility"
 	_ "github.com/lib/pq"
 	"log"
 )
@@ -13,7 +14,8 @@ type PgRepository struct {
 }
 
 /*
-*
+	GetArticoliCollezioneByIdREPO
+
 Restituisce gli articoli della Collezione avente id `idCollezione`
 */
 func (r *PgRepository) GetArticoliCollezioneByIdREPO(idCollezione int) []core.Item {
@@ -100,7 +102,7 @@ func (r *PgRepository) GetArticoloREPO(idArticolo int) core.Item {
 		}
 	}
 	if !ok { //???? come restituisco nil
-		result.Name = "Articolo non presente"
+		//result.Name = "Articolo non presente"
 		return result
 	}
 
@@ -114,12 +116,19 @@ func (r *PgRepository) GetArticoloREPO(idArticolo int) core.Item {
 	return result
 }
 
-func New() PgRepository {
-	connStr := "host=localhost port=5432 user=demo password=demo dbname=demo sslmode=disable"
-	db, err := sql.Open("postgres", connStr)
-	if err != nil {
-		log.Fatal(err)
-	}
+func New() *PgRepository {
+	db := utility.InitTestDb()
 	r := PgRepository{db: db}
-	return r
+	return &r
 }
+
+//crea un PGRepository che si connette al container di credenziali connStr
+//func New() *PgRepository {
+//	connStr := "host=localhost port=5432 user=demo password=demo dbname=demo sslmode=disable"
+//	db, err := sql.Open("postgres", connStr)
+//	if err != nil {
+//		log.Fatal(err)
+//	}
+//	r := PgRepository{db: db}
+//	return &r
+//}

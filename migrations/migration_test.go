@@ -72,7 +72,6 @@ func initTestDb() (*sql.DB, error) {
 	if errOpen != nil {
 		log.Fatal(errOpen)
 	}
-	//defer db.Instance.Terminate(context.Background())
 	/**
 	1. Creare db con test container su cui fare le migrazioni
 	2. Mappo la porta creata da testContainers sulla porta che ho esposto

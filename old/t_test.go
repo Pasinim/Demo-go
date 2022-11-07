@@ -2,13 +2,13 @@
 //
 //import (
 //	"demo/core"
-//	"github.com/stretchr/testify/mock"
-//	_ "github.com/stretchr/testify/mock"
+//	"github.com/stretchr/testify/mockt"
+//	_ "github.com/stretchr/testify/mockt"
 //	"testing"
 //)
 //
 ///**
-//1. Genero mock
+//1. Genero mockt
 //2. Metodi che restituiscono
 //*/
 //
@@ -19,9 +19,9 @@
 //
 ///** I test devono testare ogni livello in modo indipendente -> - Dependency Injection */
 //
-//// creo una struttura mock che implementa i metodi dell'interfaccia
+//// creo una struttura mockt che implementa i metodi dell'interfaccia
 //type RepositoryMock struct {
-//	mock.Mock //marca la struttura come mock
+//	mockt.Mock //marca la struttura come mockt
 //}
 //
 //func (m *RepositoryMock) GetArticoloREPO(i int) core.Item {
@@ -56,13 +56,13 @@
 //	panic("implement me")
 //}
 //
-//func (m *RepositoryMock) GetArticoliCollezioneREPO(i int) []core.Item {
+//func (m *RepositoryMock) GetArticoliCollezioneByIdREPO(i int) []core.Item {
 //	//TODO implement me
 //	panic("implement me")
 //}
 //
 ////func TestRepo_GetAllCollezioniREPO(t *testing.T) {
-////	var m mock
+////	var m mockt
 ////	router := api.New(m)
 ////	w := httptest.NewRecorder()
 ////	req, err := http.NewRequest("GET", "/collezione/", nil)

@@ -7,77 +7,79 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq"
+
 	"reflect"
 	"testing"
 )
 
 var db = utility.InitTestDb()
 
-func TestPgRepository_GetArticoliCollezioneREPO(t *testing.T) {
-	type fields struct {
-		db *sql.DB
-	}
-	type args struct {
-		idCollezione int
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		args   args
-		want   []core.Item
-	}{
-		{
-			name:   "Articoli Collezione Estiva",
-			fields: fields{db},
-			args:   args{1},
-			want: []core.Item{
-				{
-					Id:   1,
-					Name: "Scarpe",
-					Sku:  11,
-				},
-				{
-					Id:   2,
-					Name: "Maglia",
-					Sku:  22,
-				},
-				{
-					Id:   3,
-					Name: "Panta",
-					Sku:  33,
-				},
-			},
-		},
-		{
-			name:   "Articoli Collezione Invernale",
-			fields: fields{db},
-			args:   args{2},
-			want: []core.Item{
-				{
-					Id:   4,
-					Name: "Maglione",
-					Sku:  44,
-				},
-				{
-					Id:   5,
-					Name: "Berretto",
-					Sku:  55,
-				},
-			},
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			r := &PgRepository{
-				db: tt.fields.db,
-			}
-			if got := r.GetArticoliCollezioneREPO(tt.args.idCollezione); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetArticoliCollezioneREPO() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
+//
+//func TestPgRepository_GetArticoliCollezioneREPO(t *testing.T) {
+//	type fields struct {
+//		db *sql.DB
+//	}
+//	type args struct {
+//		idCollezione int
+//	}
+//	tests := []struct {
+//		name   string
+//		fields fields
+//		args   args
+//		want   []core.Item
+//	}{
+//		{
+//			name:   "Articoli Collezione Estiva",
+//			fields: fields{db},
+//			args:   args{1},
+//			want: []core.Item{
+//				{
+//					Id:   1,
+//					Name: "Scarpe",
+//					Sku:  11,
+//				},
+//				{
+//					Id:   2,
+//					Name: "Maglia",
+//					Sku:  22,
+//				},
+//				{
+//					Id:   3,
+//					Name: "Panta",
+//					Sku:  33,
+//				},
+//			},
+//		},
+//		{
+//			name:   "Articoli Collezione Invernale",
+//			fields: fields{db},
+//			args:   args{2},
+//			want: []core.Item{
+//				{
+//					Id:   4,
+//					Name: "Maglione",
+//					Sku:  44,
+//				},
+//				{
+//					Id:   5,
+//					Name: "Berretto",
+//					Sku:  55,
+//				},
+//			},
+//		},
+//	}
+//
+//	for _, tt := range tests {
+//		t.Run(tt.name, func(t *testing.T) {
+//			r := &PgRepository{
+//				db: tt.fields.db,
+//			}
+//			if got := r.GetArticoliCollezioniREPO(tt.args.idCollezione); !reflect.DeepEqual(got, tt.want) {
+//				t.Errorf("GetArticoliCollezioneByIdREPO() = %v, want %v", got, tt.want)
+//			}
+//		})
+//	}
+//}
 
 func TestPgRepository_GetAllCollezioniREPO(t *testing.T) {
 	type fields struct {
@@ -188,6 +190,81 @@ func TestPgRepository_GetArticoloREPO(t *testing.T) {
 			}
 			if got := r.GetArticoloREPO(tt.args.idArticolo); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("GetArticoloREPO() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestPgRepository_GetArticoliCollezioneByIdREPO(t *testing.T) {
+	type fields struct {
+		db *sql.DB
+	}
+	type args struct {
+		idCollezione int
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    []core.Item
+		wantErr bool
+	}{
+		{
+			name:   "Articoli Collezione 1",
+			fields: fields{db: db},
+			args:   args{1},
+			want: []core.Item{
+				{
+					Id:   1,
+					Name: "Scarpe",
+					Sku:  11,
+				},
+				{
+					Id:   2,
+					Name: "Maglia",
+					Sku:  22,
+				},
+				{
+					Id:   3,
+					Name: "Panta",
+					Sku:  33,
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name:   "Collezione 2",
+			fields: fields{db: db},
+			args:   args{2},
+			want: []core.Item{
+				{
+					Id:   4,
+					Name: "Maglione",
+					Sku:  44,
+				},
+				{
+					Id:   5,
+					Name: "Berretto",
+					Sku:  55,
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name:    "Collezione vuota",
+			fields:  fields{db: db},
+			args:    args{0},
+			want:    make([]core.Item, 0),
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			r := &PgRepository{
+				db: tt.fields.db,
+			}
+			if got := r.GetArticoliCollezioneByIdREPO(tt.args.idCollezione); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("GetArticoloREPOById() = %v, want %v", got, tt.want)
 			}
 		})
 	}

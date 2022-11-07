@@ -7,7 +7,7 @@ import (
 
 /*
 *
-Il mock permette di creare una struttura con gli stessi metodi
+Il mockt permette di creare una struttura con gli stessi metodi
 della repository, definisco i metodi con la stessa signature
 e decido io cosa devono restituire (dico cosa restituire nel test)
 */
@@ -25,18 +25,18 @@ func (m *RepositoryMock) GetAllCollezioniREPO() []core.Collection {
 	return ret
 }
 
-func (m *RepositoryMock) GetArticoloREPO(i int) *core.Item {
+func (m *RepositoryMock) GetArticoloREPO(i int) core.Item {
 	args := m.Called()
-	var ret *core.Item
+	var ret core.Item
 	v := args.Get(0)
 	if v != nil {
-		ret = v.(*core.Item)
+		ret = v.(core.Item)
 	}
 	return ret
 }
 
-func (m *RepositoryMock) GetArticoliCollezioneREPO(i int) []core.Item {
-	args := m.Called(i)
+func (m *RepositoryMock) GetArticoliCollezioniREPO() []core.Item {
+	args := m.Called()
 	var ret []core.Item
 	value := args.Get(0)
 	if value != nil {
@@ -55,5 +55,14 @@ func (m *RepositoryMock) GetArticoliREPO() []core.Item {
 		r = v.([]core.Item)
 	}
 	return r
+}
 
+func (m *RepositoryMock) GetArticoliCollezioneByIdREPO(i int) []core.Item {
+	args := m.Called(i)
+	var r []core.Item
+	v := args.Get(0)
+	if v != nil {
+		r = v.([]core.Item)
+	}
+	return r
 }
