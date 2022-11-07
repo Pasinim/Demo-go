@@ -101,7 +101,7 @@ func (r *PgRepository) GetArticoloREPO(idArticolo int) core.Item {
 			break
 		}
 	}
-	if !ok { //???? come restituisco nil
+	if !ok {
 		//result.Name = "Articolo non presente"
 		return result
 	}
@@ -121,14 +121,3 @@ func New() *PgRepository {
 	r := PgRepository{db: db}
 	return &r
 }
-
-//crea un PGRepository che si connette al container di credenziali connStr
-//func New() *PgRepository {
-//	connStr := "host=localhost port=5432 user=demo password=demo dbname=demo sslmode=disable"
-//	db, err := sql.Open("postgres", connStr)
-//	if err != nil {
-//		log.Fatal(err)
-//	}
-//	r := PgRepository{db: db}
-//	return &r
-//}

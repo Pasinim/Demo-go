@@ -4,7 +4,6 @@ go 1.19
 
 require (
 	github.com/gin-gonic/gin v1.8.1
-	github.com/golang-migrate/migrate v3.5.4+incompatible
 	github.com/golang-migrate/migrate/v4 v4.15.2
 	github.com/google/go-cmp v0.5.9
 	github.com/lib/pq v1.10.7
@@ -16,6 +15,7 @@ require (
 	github.com/Azure/go-ansiterm v0.0.0-20210617225240-d185dfc1b5a1 // indirect
 	github.com/Microsoft/go-winio v0.5.2 // indirect
 	github.com/Microsoft/hcsshim v0.9.4 // indirect
+	github.com/approvals/go-approval-tests v0.0.0-20220530063708-32d5677069bd // indirect
 	github.com/cenkalti/backoff/v4 v4.1.3 // indirect
 	github.com/containerd/cgroups v1.0.4 // indirect
 	github.com/containerd/containerd v1.6.8 // indirect
