@@ -10,36 +10,36 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq"
 	"github.com/stretchr/testify/assert"
-	"io"
-	"log"
 	"net/http/httptest"
 	"testing"
 )
 
 func TestEcommerceApi_GETArticoli(t *testing.T) {
 	mk := new(mockt.RepositoryMock)
-	w := httptest.NewRecorder()
-	ctx, _ := gin.CreateTestContext(w)
 
 	type fields struct {
 		rep Repository
 	}
 	type args struct {
+		r httptest.ResponseRecorder
 		c *gin.Context
 	}
 	tests := []struct {
 		name   string
 		fields fields
-		args   args
+		args   func() args
 		want   []core.Item
 	}{
 		{
-			name: "Articoli 1",
-			fields: fields{
-				rep: mk,
-			},
-			args: args{
-				c: ctx,
+			name:   "Articoli 1",
+			fields: fields{rep: mk},
+			args: func() args {
+				r := httptest.NewRecorder()
+				ctx, _ := gin.CreateTestContext(r)
+				return args{
+					r: *r,
+					c: ctx,
+				}
 			},
 			want: []core.Item{
 
@@ -77,9 +77,10 @@ func TestEcommerceApi_GETArticoli(t *testing.T) {
 				rep: tt.fields.rep,
 			}
 			mk.On("GetArticoliREPO").Return(tt.want)
-			e.GETArticoli(tt.args.c)
+			a := tt.args()
+			e.GETArticoli(a.c)
 			var got []core.Item
-			err := json.Unmarshal(w.Body.Bytes(), &got)
+			err := json.Unmarshal(a.r.Body.Bytes(), &got)
 			fmt.Println("GOT", got)
 			assert.Nil(t, err)
 			assert.Equal(t, tt.want, got)
@@ -90,19 +91,17 @@ func TestEcommerceApi_GETArticoli(t *testing.T) {
 func TestEcommerceApi_GETAllCollezioni(t *testing.T) {
 
 	mk := new(mockt.RepositoryMock)
-	w := httptest.NewRecorder()
-	ctx, _ := gin.CreateTestContext(w)
-
 	type fields struct {
 		rep Repository
 	}
 	type args struct {
+		r httptest.ResponseRecorder
 		c *gin.Context
 	}
 	tests := []struct {
 		name   string
 		fields fields
-		args   args
+		args   func() args
 		want   []core.Collection
 	}{
 		{
@@ -110,8 +109,13 @@ func TestEcommerceApi_GETAllCollezioni(t *testing.T) {
 			fields: fields{
 				rep: mk,
 			},
-			args: args{
-				c: ctx,
+			args: func() args {
+				r := httptest.NewRecorder()
+				ctx, _ := gin.CreateTestContext(r)
+				return args{
+					r: *r,
+					c: ctx,
+				}
 			},
 			want: []core.Collection{
 				{
@@ -134,10 +138,11 @@ func TestEcommerceApi_GETAllCollezioni(t *testing.T) {
 				rep: tt.fields.rep,
 			}
 			mk.On("GetAllCollezioniREPO").Return(tt.want)
-			e.GETAllCollezioni(tt.args.c)
+			a := tt.args()
+			e.GETAllCollezioni(a.c)
 			var got []core.Collection
 
-			err := json.Unmarshal(w.Body.Bytes(), &got)
+			err := json.Unmarshal(a.r.Body.Bytes(), &got)
 			assert.Nil(t, err)
 			assert.Equal(t, tt.want, got)
 		})
@@ -247,82 +252,10 @@ func TestEcommerceApi_GETArticoliCollezioneById(t *testing.T) {
 			e.GETArticoliCollezioneById(a.c)
 			var got []core.Item
 			res := a.r.Result()
-
-			str, err := io.ReadAll(res.Body)
-
-			if err != nil {
-				log.Fatal()
-			}
-
-			fmt.Println("BODYdad....", string(str))
-			err = json.Unmarshal(a.r.Body.Bytes(), &got)
-
-			fmt.Println("....", got)
+			err := json.Unmarshal(a.r.Body.Bytes(), &got)
 			assert.Nil(t, err)
 			assert.Equal(t, 200, res.StatusCode)
 			assert.Equal(t, tt.want, got)
-		})
-	}
-}
-
-/*
-*
-GetArticoliBycollezioneid
-*/
-func TestEcommerceApi_GETCollezione(t *testing.T) {
-	mk := new(mockt.RepositoryMock)
-	w := httptest.NewRecorder()
-	ctx, _ := gin.CreateTestContext(w)
-
-	type fields struct {
-		rep Repository
-	}
-	type args struct {
-		c *gin.Context
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		args   args
-		want   core.Collection
-	}{
-		{
-			name: "Collezione 1",
-			fields: fields{
-				mk,
-			},
-			args: args{
-				c: ctx,
-				//c: context.WithValue(ctx, "id", 1),
-			},
-			want: core.Collection{
-				Id:       1,
-				Name:     "Collezione Estiva",
-				Articles: nil,
-			},
-		},
-		{
-			name:   "Collezione 2",
-			fields: fields{mk},
-			args: args{
-				c: ctx,
-				//context.WithValue(ctx, "id", 2),
-			},
-			want: core.Collection{
-				Id:       2,
-				Name:     "Collezione Invernale",
-				Articles: nil,
-			},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-
-			e := &EcommerceApi{
-				rep: tt.fields.rep,
-			}
-			e.GETCollezione(tt.args.c)
-
 		})
 	}
 }
