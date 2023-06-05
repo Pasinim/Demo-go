@@ -81,12 +81,14 @@ func initTestDb() (*sql.DB, error) {
 	//devo mappare la porta 5432 su quella che è stata generata esternamente
 	connStr := fmt.Sprintf("postgres://demo:demo@127.0.0.1:%d/demo?sslmode=disable", port.Int())
 	m, err := migrate.New(
-		"file://migrations/test",
+		"cartella delle migrazioni",
+		// "file://migrations/test",
 		connStr)
 	if err != nil {
 		log.Fatal(err)
 	}
 	err = m.Up()
+	m.
 	fmt.Println("migrate.UP")
 	if err != nil {
 		log.Fatal(err)
@@ -95,3 +97,7 @@ func initTestDb() (*sql.DB, error) {
 	//fmt.Println("time.Sleep...")
 	return db, err
 }
+
+
+
+

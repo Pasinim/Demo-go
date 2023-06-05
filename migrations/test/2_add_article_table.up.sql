@@ -4,3 +4,6 @@ CREATE TABLE IF NOT EXISTS articolo (
     sku integer,
     collezione_id serial  REFERENCES collezione(id) ON DELETE CASCADE
 );
+
+
+1\_add\_collection\_table.up.sql
